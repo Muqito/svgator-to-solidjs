@@ -58,40 +58,35 @@ fn main() {
         }
     }
 
-    let mut file_writer = Writer::new(Cursor::new(Vec::new()));
+    let svg = String::from_utf8_lossy(&writer.into_inner().into_inner()).to_string();
 
-    let _ = file_writer.write(
-        br#"import { createEffect } from "solid-js";
+    let data = if let Some(script) = &saved_script {
+        format!(
+            "import {{ createEffect }} from 'solid-js';
 
-export const Icon = () => {
-"#,
-    );
+export const Icon = () => {{
+    createEffect(() => {{
+     {script}
+    }});
 
-    if let Some(script) = &saved_script {
-        let _ = file_writer.write(b" createEffect(() => {");
-        let _ = file_writer.write(script.as_ref());
-        let _ = file_writer.write(b"});");
-    }
+    return ({svg});
+}};
 
-    let _ = file_writer.write(
-        br#"
-    return (
-    "#,
-    );
+export default Icon;",
+            script = String::from_utf8_lossy(script),
+            svg = svg
+        )
+    } else {
+        format!(
+            "import {{ createEffect }} from 'solid-js';
 
-    let _ = file_writer.write(&writer.into_inner().into_inner());
+export const Icon = () => {svg};
 
-    let _ = file_writer.write(
-        br#"
-    );
-};
+export default Icon;",
+            svg = svg
+        )
+    };
 
-export default Icon;"#,
-    );
-
-    let str = file_writer.into_inner().into_inner();
-    let result = String::from_utf8(str).expect("Couldn't convert to string");
-
-    let _ = fs::write(&args.output, result).expect("Couldn't save file");
+    let _ = fs::write(&args.output, data).expect("Couldn't save file");
     println!("Saved file in: {}", args.output);
 }
