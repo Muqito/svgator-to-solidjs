@@ -3,6 +3,9 @@ name = "svgator-to-solidjs"
 version = "0.1.0"
 edition = "2021"
 authors = ["Christoffer Lantz <christoffer.lantz@androidbutiken.net>"]
+license = "MIT OR Apache-2.0"
+description = "Converts a SVGator export to solidjs compatible import"
+categories = ["Web programming"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
