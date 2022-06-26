@@ -1,8 +1,7 @@
 use clap::Parser;
-use quick_xml::events::{BytesCData, Event};
+use quick_xml::events::Event;
 use quick_xml::Writer;
 use std::borrow::Cow;
-use std::env::Args;
 use std::fs;
 use std::io::{Cursor, Read};
 
@@ -30,7 +29,7 @@ fn main() {
     }
     let mut state = State::Other;
     let mut writer = Writer::new(Cursor::new(Vec::new()));
-    let mut savedScript: Option<Cow<[u8]>> = None;
+    let mut saved_script: Option<Cow<[u8]>> = None;
 
     while let Ok(token) = reader.read_event_unbuffered() {
         state = match (state, &token) {
@@ -49,7 +48,7 @@ fn main() {
             }
             (State::Script, Event::CData(e)) => {
                 let data = e.clone().into_inner();
-                savedScript = Some(data);
+                saved_script = Some(data);
                 State::Script
             }
             (state, event) => {
@@ -68,7 +67,7 @@ export const Icon = () => {
 "#,
     );
 
-    if let Some(script) = &savedScript {
+    if let Some(script) = &saved_script {
         let _ = file_writer.write(b" createEffect(() => {");
         let _ = file_writer.write(script.as_ref());
         let _ = file_writer.write(b"});");
