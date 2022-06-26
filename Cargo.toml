@@ -1,6 +1,6 @@
 [package]
 name = "svgator-to-solidjs"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 authors = ["Christoffer Lantz <christoffer.lantz@androidbutiken.net>"]
 license = "MIT OR Apache-2.0"
