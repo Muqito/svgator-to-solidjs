@@ -90,7 +90,7 @@ export default Icon;"#,
     );
 
     let str = file_writer.into_inner().into_inner();
-    let result = String::from_utf8(str).expect("Couldn't conver tot string");
+    let result = String::from_utf8(str).expect("Couldn't convert to string");
 
     let _ = fs::write(&args.output, result).expect("Couldn't save file");
     println!("Saved file in: {}", args.output);
